@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background-color: rgb(255, 255, 255);
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <span id="container"></span>
+  </body>
+</html>
+
+<script>
+fetch("main.wasm")
+  .then((response) => response.arrayBuffer())
+  .then((bytes) =>
+    WebAssembly.instantiate(bytes, {
+      console: {
+        log: (value) => console.log(value),
+      },
+    })
+  )
+  .then((results) => {
+    instance = results.instance;
+    document.getElementById("container").textContent = instance.exports.add(
+      10,
+      100
+    );
+  })
+  .catch(console.error);
+
+</script>
